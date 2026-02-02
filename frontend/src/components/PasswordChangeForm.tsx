@@ -89,7 +89,8 @@ const PasswordChangeForm: React.FC<PasswordChangeFormProps> = ({ onPasswordChang
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+        <img src="/img/katalyst_basic.png" alt="Logo" className="w-32 h-32 mx-auto mb-4" />
         <div className="bg-white p-8 rounded-lg shadow-md w-96 text-center">
           <div className="mb-4">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
@@ -107,7 +108,7 @@ const PasswordChangeForm: React.FC<PasswordChangeFormProps> = ({ onPasswordChang
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
         <img src="/img/katalyst_basic.png" alt="Logo" className="w-32 h-32 mx-auto mb-4" />
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Cambiar Contraseña</h2>

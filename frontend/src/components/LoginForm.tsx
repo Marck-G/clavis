@@ -40,8 +40,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className='flex items-center justify-center pr-3 mr-8'> 
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+      <div className='flex items-center justify-center '> 
         <img src="/img/katalyst_basic.png" alt="Logo" className="w-32 h-32 mx-auto mb-4" />
       </div>
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
