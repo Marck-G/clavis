@@ -11,6 +11,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod auth;
 mod ldap;
+mod notification;
 
 use tower_http::services::ServeDir;
 

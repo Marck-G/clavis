@@ -3,6 +3,8 @@ use md4::{Digest, Md4};
 use std::{collections::HashSet, env};
 use tracing::info;
 
+use crate::notification::send_email;
+
 #[allow(dead_code)]
 pub async fn test_connection() -> Result<String, String> {
     let ldap_url = env::var("LDAP_URL").map_err(|_| "LDAP_URL not set".to_string())?;
@@ -154,10 +156,16 @@ pub async fn change_user_password(username: &str, new_password: &str) -> Result<
         )];
 
         info!("Attempting to change password using unicodePwd attribute");
+
         match ldap.modify(&user_dn, modify_attrs) {
             Ok(s) => {
                 info!("result: {}", s.to_string());
                 info!("Password changed successfully using unicodePwd");
+
+                let email = get_user_email(&mut ldap, &user_dn, &base_dn)?;
+                info!("Email: {}", email);
+                send_email(email).unwrap();
+                info!("Password changed successfully using sambaNTPassword");
                 return Ok(());
             }
             Err(e) => {
@@ -186,6 +194,10 @@ pub async fn change_user_password(username: &str, new_password: &str) -> Result<
                 info!("Attempting to change password using sambaNTPassword attribute");
                 match ldap.modify(&user_dn, samba_modify_attrs) {
                     Ok(_) => {
+                        info!("Password changed successfully");
+                        let email = get_user_email(&mut ldap, &user_dn, &base_dn)?;
+                        info!("Email: {}", email);
+                        send_email(email)?;
                         info!("Password changed successfully using sambaNTPassword");
                         return Ok(());
                     }
@@ -203,7 +215,9 @@ pub async fn change_user_password(username: &str, new_password: &str) -> Result<
     .await;
 
     match res {
-        Ok(Ok(_)) => Ok(()),
+        Ok(Ok(_)) => {
+            return Ok(());
+        }
         Ok(Err(e)) => Err(format!("Failed to change password: {}", e)),
         Err(e) => Err(format!("Task Join Error: {}", e)),
     }
@@ -228,4 +242,25 @@ fn find_user_dn(ldap: &mut LdapConn, username: &str, base_dn: &str) -> Result<St
     let dn = se.dn;
 
     Ok(dn)
+}
+
+fn get_user_email(ldap: &mut LdapConn, username: &str, base_dn: &str) -> Result<String, String> {
+    // Search for the user
+    let filter = format!("(&(objectClass=user)(distinguishedName={}))", username);
+
+    let search_result = ldap
+        .search(base_dn, Scope::Subtree, &filter, vec!["mail"])
+        .map_err(|e| e.to_string())?;
+
+    let (entries, _result) = search_result.success().map_err(|e| e.to_string())?;
+
+    if entries.len() != 1 {
+        return Err(format!("User {} not found or multiple matches", username));
+    }
+
+    let entry = &entries[0];
+    let se = SearchEntry::construct(entry.clone());
+    let email = se.attrs.get("mail").unwrap()[0].clone();
+
+    Ok(email)
 }
