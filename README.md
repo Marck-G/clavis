@@ -1,4 +1,8 @@
 # CLAVIS
+<p align="center">
+<strong>CLAVIS BY</strong> <br/>
+  <img src="frontend/public/img/katalyst_basic.png" alt="CLAVIS" width="70"/>
+</p>
 
 ## Description
 
@@ -6,6 +10,12 @@ CLAVIS is a web application that allows users to change their passwords in Activ
 
 ## Background
 I have a home lab with a Samba AD domain controller and I don't want to use terminal or windows tools to change manually the passwords of the users. So I decided to create a web application to change the passwords of the users.
+
+## Features
+
+- [x] Change password for users in Active Directory or Samba AD
+- [x] Use StartTLS connection
+- [x] Allow self signed certificates (has disabled certificate validation)
 
 ## Password Policy
 
