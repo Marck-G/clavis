@@ -35,3 +35,9 @@ I have a home lab with a Samba AD domain controller and I don't want to use term
 | LDAP_SERVICE_PASSWORD | LDAP service password | admin |
 | RUST_LOG | Log level | info |
 | BIND_ADDRESS | Bind address | 0.0.0.0:40000 |
+| SMTP_HOST | SMTP server host | smtp.example.com |
+| SMTP_PORT | SMTP server port | 587 |
+| SMTP_USERNAME | SMTP username | username |
+| SMTP_PASSWORD | SMTP password | password |
+| SMTP_FROM | SMTP from | [EMAIL_ADDRESS] |
+
