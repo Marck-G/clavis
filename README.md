@@ -41,3 +41,46 @@ I have a home lab with a Samba AD domain controller and I don't want to use term
 | SMTP_PASSWORD | SMTP password | password |
 | SMTP_FROM | SMTP from | [EMAIL_ADDRESS] |
 
+## Dependencies
+It need `openssl` and `ca-certificates` for email transport other wise when try to send a message will fail.
+To disable the SMPT don't use the SMTP environment vars and it will disable automatically.
+
+## Build
+For local build we have the makefile with some utils commands for building and run:
+
+```bash
+# build the service
+make build
+# build and run the service
+make run
+```
+
+## Docker
+There is a docker version with Dockerfile, it install all the dependencies and build the service inside the container and you can run it with docker-compose:
+
+```bash
+services:
+  clavis:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - LDAP_URL=ldap://ip_or_hostname:389
+      - LDAP_BASE_DN=DC=exampl,DC=local
+      - LDAP_SERVICE_USER=CN=Administrator,CN=Users,DC=example,DC=local
+      - LDAP_SERVICE_PASSWORD=password
+      - RUST_LOG=info
+      - BIND_ADDRESS=0.0.0.0:3000
+      - SMTP_HOST=smtp
+      - SMTP_PORT=587
+      - SMTP_USERNAME=username@smtp.com
+      - SMTP_PASSWORD=user_password
+      - SMTP_FROM=from@email.com
+    restart: always
+```
+### Internally
+We have a image on nexus in `katalyst-docker/clavis` and we can pull it or use in ocker compose with:
+```yaml
+image: nexus.katalyst.con/katalyst-docker/clavis:latest
+
+```
