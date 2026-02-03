@@ -19,4 +19,10 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 bcrypt = "0.18"
 md-5 = "0.10"
 md4 = "0.10"
-lettre = { version = "0.11.19", features = ["tokio1-native-tls", "tracing"] }
+lettre = { version = "0.11.19", default-features = false, features = [
+	"tokio1-rustls",
+	"rustls-tls",
+	"tracing",
+	"builder",
+	"smtp-transport",
+] }

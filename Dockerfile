@@ -5,6 +5,8 @@ WORKDIR /app
 
 COPY Cargo.toml Cargo.toml
 COPY src/ src/
+# Increase rustc stack
+ENV RUST_MIN_STACK=16777216
 
 RUN cargo build --release
 
@@ -24,6 +26,8 @@ RUN npm run build
 
 # Runtime
 FROM debian:stable-slim
+RUN apt update; apt upgrade -y;
+# RUN apt install -y openssl ca-certificates
 
 WORKDIR /app
 
